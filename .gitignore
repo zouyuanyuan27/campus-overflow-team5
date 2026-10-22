@@ -1,0 +1,23 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+# Gradle
+.gradle/
+build/
+# 编译产物
+*.class
+*.jar
+*.war
+# ⽇志与临时⽂件
+*.log
+.DS_Store
+Thumbs.db
