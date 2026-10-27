@@ -5,7 +5,7 @@
 专业：计算机科学与技术
 
 负责角色
-GitHub: @zouyuanyuan27
+GitHub: @QY2026932
 Role: Developer
 
 技能
