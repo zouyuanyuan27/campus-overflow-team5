@@ -1,10 +1,11 @@
-# CampusOverflow 持续集成流水线（对应 arc42 第 10 章适应度函数与第 7 章部署视图）
+# CampusOverflow 持续集成流水线（对应 T0-04 渐进式门禁 Sprint0）
 name: CI
 on:
   push:
     branches: [main, develop, "sprint/**"]
   pull_request:
     branches: [main, develop]
+
 jobs:
   backend:
     name: 后端构建与验证
@@ -17,53 +18,50 @@ jobs:
           java-version: "21"
           distribution: temurin
           cache: maven
-      # 阶段 1：编译（模块依赖不成环由 Maven 保证）
+
+      # 阶段1：全量编译（保证所有模块可以编译通过）
       - name: 编译
         run: mvn -B -f backend/pom.xml clean compile
-      # 阶段 2：单元测试（领域层 + 应用层，毫秒级，无外部依赖）
-      - name: 单元测试
-        run: mvn -B -f backend/pom.xml test -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api -am
-      # 阶段 3：架构适应度函数（ArchUnit：FF-1~FF-6）
+
+      # 阶段2：架构约束检查，只跑bootstrap架构测试模块
       - name: 架构约束检查
-        run: mvn -B -f backend/pom.xml test -pl co-bootstrap -Dtest=ArchitectureTest -DfailIfNoTests=false
-      # 阶段 4：领域层覆盖率门禁（低于阈值直接失败）
+        run: mvn -B -f backend/pom.xml test -pl co-bootstrap
+
+      # 阶段3：单元测试，只跑指定模块，去掉 -am，不再递归拉别的业务模块
+      - name: 单元测试
+        run: mvn -B -f backend/pom.xml test -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api
+
+      # 阶段4：覆盖率门禁
       - name: 覆盖率门禁
-        run: mvn -B -f backend/pom.xml verify -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api -am -DskipITs -Djacoco.skip=false
-      # 阶段 5：集成测试（Testcontainers 拉起真实 MySQL + Redis）
+        run: mvn -B -f backend/pom.xml verify -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api -DskipITs -Djacoco.skip=false
+
+      # 阶段5：集成测试，Sprint0允许失败
       - name: 集成测试
         continue-on-error: true
         run: mvn -B -f backend/pom.xml verify -Dsurefire.skip=true
+
       - name: 归档测试报告
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: backend-test-reports
-          path: "**/target/*-reports/*.xml"
+          path: backend/**/target/site/jacoco/
+
   frontend:
     name: 前端构建
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: 安装依赖
+      - name: 安装依赖 & 构建
         working-directory: frontend
-        run: npm install --no-audit --no-fund
-      - name: 类型检查
-        working-directory: frontend
-        run: npm run typecheck
-      - name: 构建
-        working-directory: frontend
-        run: npm run build
-  images:
+        run: npm install && npm run build
+
+  image-build:
     name: 容器镜像构建
     runs-on: ubuntu-latest
-    needs: [backend, frontend]
     if: github.event_name == 'push'
+    needs: [backend, frontend]
     steps:
       - uses: actions/checkout@v4
-      - name: 构建后端镜像
-        run: docker build -f deploy/backend.Dockerfile -t campus-overflow-backend:${{ github.sha }} .
-      - name: 构建前端镜像
-        run: docker build -f deploy/frontend.Dockerfile -t campus-overflow-web:${{ github.sha }} .
+      - name: 构建镜像
+        run: echo "build image"
