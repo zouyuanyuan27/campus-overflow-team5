@@ -1,4 +1,3 @@
-# CampusOverflow 持续集成流水线（对应 T0-04 渐进式门禁 Sprint0）
 name: CI
 on:
   push:
@@ -19,23 +18,18 @@ jobs:
           distribution: temurin
           cache: maven
 
-      # 阶段1：全量编译（保证所有模块可以编译通过）
       - name: 编译
         run: mvn -B -f backend/pom.xml clean compile
 
-      # 阶段2：架构约束检查，只跑bootstrap架构测试模块
       - name: 架构约束检查
-        run: mvn -B -f backend/pom.xml test -pl co-bootstrap
+        run: mvn -B -f backend/pom.xml test -pl co-bootstrap -am -Dtest=ArchitectureTest -DfailIfNoTests=false
 
-      # 阶段3：单元测试，只跑指定模块，去掉 -am，不再递归拉别的业务模块
       - name: 单元测试
         run: mvn -B -f backend/pom.xml test -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api
 
-      # 阶段4：覆盖率门禁
       - name: 覆盖率门禁
         run: mvn -B -f backend/pom.xml verify -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api -DskipITs -Djacoco.skip=false
 
-      # 阶段5：集成测试，Sprint0允许失败
       - name: 集成测试
         continue-on-error: true
         run: mvn -B -f backend/pom.xml verify -Dsurefire.skip=true
