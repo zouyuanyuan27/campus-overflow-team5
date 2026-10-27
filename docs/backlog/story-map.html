@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>CampusOverflow 用户故事地图 v2.0</title>
+<style>
+  @page { size: A4 landscape; margin: 10mm; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 18px 20px;
+    font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+    color: #1f2328; background: #fff;
+  }
+  header { display: flex; justify-content: space-between; align-items: flex-end;
+           border-bottom: 3px solid #0969da; padding-bottom: 8px; margin-bottom: 12px; }
+  h1 { margin: 0; font-size: 21px; }
+  .hdr-r { text-align: right; font-size: 11px; color: #59636e; line-height: 1.5; }
+  .legend { font-size: 10.5px; color: #59636e; margin-bottom: 10px; }
+  .legend span { margin-right: 14px; }
+
+  .grid { display: grid; grid-template-columns: 78px repeat(6, 1fr); gap: 5px; }
+  .ax, .col {
+    background: #0969da; color: #fff; text-align: center; padding: 6px 2px;
+    font-size: 12.5px; font-weight: 700; border-radius: 4px;
+  }
+  .ax { background: #f6f8fa; color: #59636e; font-weight: 600; font-size: 10.5px;
+        display: flex; align-items: center; justify-content: center; }
+  .rowlab {
+    background: #f6f8fa; border-radius: 4px; font-size: 10.5px; font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 5px 2px; color: #24292f; border-left: 3px solid #8250df;
+  }
+  .rowlab small { font-weight: 400; color: #59636e; font-size: 9.5px; }
+  .cell { min-height: 62px; display: flex; flex-direction: column; gap: 4px; padding: 4px; }
+
+  .card {
+    border-radius: 5px; padding: 5px 6px; font-size: 10px; line-height: 1.35;
+    border: 1px solid #d1d9e0; background: #fff;
+  }
+  .card .id { font-weight: 700; font-size: 10px; }
+  .card .t { margin-top: 1px; }
+  .card .sp { float: right; font-weight: 700; opacity: .75; }
+
+  .c-skel { background: #dafbe1; border-color: #4ac26b; }
+  .c-skel .id { color: #0a5221; }
+  .c-r1 { background: #ddf4ff; border-color: #54aeff; }
+  .c-r1 .id { color: #0a4a75; }
+  .c-r2 { background: #f6f8fa; border-color: #d1d9e0; }
+  .c-r2 .id { color: #424a53; }
+  .c-new { background: #fff; border: 1.5px dashed #8250df; color: #6633bb; }
+  .c-new .id { color: #6633bb; }
+  .c-en { background: #fff8c5; border-color: #d4a72c; }
+  .c-en .id { color: #7d4e00; }
+
+  .skeleton-line { grid-column: 1 / -1; height: 0; border-top: 2px dashed #cf222e;
+                   position: relative; margin: 2px 0; }
+  .skeleton-line::after {
+    content: "Sprint 1 切片线 · 16 SP"; position: absolute; right: 0; top: -14px;
+    background: #cf222e; color: #fff; font-size: 9.5px; padding: 1px 7px;
+    border-radius: 3px; font-weight: 700;
+  }
+
+  .enabling { grid-column: 2 / -1; display: flex; gap: 8px; align-items: center;
+              background: #fffdf5; border: 1px dashed #d4a72c; border-radius: 5px;
+              padding: 6px 10px; margin-top: 6px; }
+  .enabling .lab { font-size: 10.5px; font-weight: 700; color: #7d4e00; white-space: nowrap; }
+  .enabling .card { flex: 0 0 auto; min-width: 150px; }
+
+  footer { margin-top: 12px; padding-top: 8px; border-top: 1px solid #d1d9e0;
+           font-size: 10px; color: #59636e; display: flex; justify-content: space-between; }
+  .flow { margin-top: 8px; font-size: 10.5px; background: #f6f8fa; border-radius: 5px;
+          padding: 7px 10px; }
+  .flow b { color: #0969da; }
+
+  @media print {
+    html, body { background: #fff; padding: 0; margin: 0;
+                 -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { zoom: .82; }
+  }</style>
+</head>
+<body>
+
+<header>
+  <h1>CampusOverflow · 用户故事地图 v2.0</h1>
+  <div class="hdr-r">
+    张嘉雨（@ember216）· Developer　｜　2026-10-27<br>
+    横轴依据：实验手册 Lab 2 Step 1　｜　编号：US-xxx（PO ProductBacklog）
+  </div>
+</header>
+
+<div class="legend">
+  <span>🔍 有访谈 R3 证据支撑</span>
+  <span>⬚ 虚线 = 建议新增，尚未进 Backlog</span>
+  <span>纵轴越靠上 = 价值越高、越早交付</span>
+</div>
+
+<div class="grid">
+  <div class="ax">活动 →</div>
+  <div class="col">① 注册</div>
+  <div class="col">② 浏览</div>
+  <div class="col">③ 提问</div>
+  <div class="col">④ 回答</div>
+  <div class="col">⑤ 互动</div>
+  <div class="col">⑥ 成长</div>
+
+  <div class="rowlab">Walking<br>Skeleton<br><small>16 SP</small></div>
+  <div class="cell">
+    <div class="card c-skel"><span class="sp">3</span><div class="id">US-001</div><div class="t">注册账号</div></div>
+    <div class="card c-skel"><span class="sp">2</span><div class="id">US-002</div><div class="t">登录账号</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-skel"><span class="sp">2</span><div class="id">US-003</div><div class="t">浏览问题列表</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-skel"><span class="sp">3</span><div class="id">US-005</div><div class="t">发布新问题</div></div>
+    <div class="card c-skel"><span class="sp">2</span><div class="id">US-007</div><div class="t">添加标签</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-skel"><span class="sp">2</span><div class="id">US-004</div><div class="t">查看详情与回答</div></div>
+    <div class="card c-skel"><span class="sp">2</span><div class="id">US-008</div><div class="t">提交回答</div></div>
+  </div>
+  <div class="cell"></div>
+  <div class="cell"></div>
+
+  <div class="skeleton-line"></div>
+
+  <div class="rowlab">Release<br>1.0<br><small>17 SP</small></div>
+  <div class="cell"></div>
+  <div class="cell">
+    <div class="card c-r1"><span class="sp">2</span><div class="id">US-011</div><div class="t">按标签筛选</div></div>
+    <div class="card c-r1"><span class="sp">1</span><div class="id">US-014 🔍</div><div class="t">显示发布时间</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-r1"><span class="sp">3</span><div class="id">US-006 🔍</div><div class="t">上传图片</div></div>
+    <div class="card c-r1"><span class="sp">3</span><div class="id">US-012 🔍</div><div class="t">匿名发布</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-r1"><span class="sp">3</span><div class="id">US-013</div><div class="t">优质回答优先 ⚠</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-r1"><span class="sp">2</span><div class="id">US-015 🔍</div><div class="t">点赞</div></div>
+    <div class="card c-new"><span class="sp">3</span><div class="id">⬚ US-016</div><div class="t">采纳最佳答案</div></div>
+  </div>
+  <div class="cell"></div>
+
+  <div class="rowlab">Release<br>2.0<br><small>8 SP</small></div>
+  <div class="cell"></div>
+  <div class="cell">
+    <div class="card c-r2"><span class="sp">3</span><div class="id">US-010</div><div class="t">关键词搜索</div></div>
+  </div>
+  <div class="cell">
+    <div class="card c-r2"><span class="sp">2</span><div class="id">US-009</div><div class="t">编辑自己的问题</div></div>
+  </div>
+  <div class="cell"></div>
+  <div class="cell"></div>
+  <div class="cell">
+    <div class="card c-new"><span class="sp">3</span><div class="id">⬚ US-017 🔍</div><div class="t">声誉体系</div></div>
+  </div>
+</div>
+
+<div class="enabling">
+  <div class="lab">使能层<br>Enabling</div>
+  <div class="card c-en"><span class="sp">2</span><div class="id">⬚ US-018</div><div class="t">CI 每次 PR 自动验证（贯穿每个发布）</div></div>
+  <div class="card c-en"><span class="sp">1</span><div class="id">⬚ US-019</div><div class="t">PR 模板与评审清单</div></div>
+</div>
+
+<div class="flow">
+  <b>Walking Skeleton 主链：</b>
+  US-001 注册 → US-002 登录 → US-005 发布问题 → US-007 加标签 → US-003 浏览列表 → US-004 查看详情 → US-008 提交回答
+  ＝ <b>16 SP</b>，砍掉任何一张演示都断链。
+</div>
+
+<footer>
+  <div>⚠ US-013 排序依据缺失（需先补 US-016/017）　｜　🔍 访谈 R3：7 条痛点中 4 条已覆盖、2 条落在缺失的声誉卡上</div>
+  <div>个人预填版 · 以 PO 主导的工作坊产出为准</div>
+</footer>
+
+</body>
+</html>

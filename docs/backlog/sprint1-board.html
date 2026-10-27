@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Sprint 1 Backlog · CampusOverflow</title>
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+  @media print { body { zoom: .56; } }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 18px 20px;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #fff; color: #1f2328;
+    width: 1300px;
+  }
+  header { border-bottom: 3px solid #24292f; padding-bottom: 10px; margin-bottom: 14px; }
+  h1 { margin: 0 0 6px; font-size: 22px; }
+  .meta { font-size: 12px; color: #57606a; }
+  .meta b { color: #1f2328; }
+  .board { display: flex; gap: 14px; }
+  .col {
+    flex: 1; border: 1px solid #d0d7de; border-radius: 8px;
+    background: #f6f8fa; padding: 10px; min-height: 400px;
+  }
+  .col h2 {
+    margin: 0 0 10px; font-size: 14px; padding: 6px 8px; border-radius: 6px;
+    background: #24292f; color: #fff; display: flex; justify-content: space-between;
+  }
+  .col.todo h2 { background: #0969da; }
+  .col.wip  h2 { background: #9a6700; }
+  .col.done h2 { background: #1a7f37; }
+  .count { font-weight: normal; font-size: 12px; opacity: .85; }
+  .card {
+    background: #fff; border: 1px solid #d0d7de; border-left: 4px solid #0969da;
+    border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;
+    box-shadow: 0 1px 2px rgba(31,35,40,.06);
+  }
+  .card .top { display: flex; justify-content: space-between; align-items: center; }
+  .sid { font: 600 12px Consolas, monospace; color: #0969da; }
+  .sp {
+    background: #ddf4ff; color: #0969da; border: 1px solid #0969da;
+    border-radius: 10px; padding: 1px 8px; font-size: 11px; font-weight: 600;
+  }
+  .title { font-size: 13px; margin: 5px 0 6px; }
+  .owner {
+    font-size: 11px; color: #57606a; display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .avatar {
+    display: inline-block; width: 20px; height: 20px; border-radius: 50%;
+    background: #0969da; color: #fff; font-size: 10px; line-height: 20px;
+    text-align: center; margin-right: 5px; font-weight: 600;
+  }
+  .tasks { font-size: 11px; color: #57606a; margin-top: 5px; padding-top: 5px; border-top: 1px dashed #d0d7de; }
+  .empty { font-size: 12px; color: #8c959f; text-align: center; padding: 30px 0; }
+  .public {
+    border-left-color: #8250df; margin-top: 10px;
+  }
+  .public .sid { color: #8250df; }
+  .public .sp { background: #fbefff; color: #8250df; border-color: #8250df; }
+  footer {
+    margin-top: 12px; padding-top: 10px; border-top: 1px solid #d0d7de;
+    font-size: 11px; color: #57606a; display: flex; justify-content: space-between;
+  }
+  .legend span { margin-right: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CampusOverflow · Sprint 1 Backlog</h1>
+  <div class="meta">
+    第 5 组（计科2412班）　|　Sprint 1：<b>14 天</b>　|　承诺 <b>16 SP</b>（全部 P0）　|　产能 22 SP → 负载 <b>73%</b>　|　锚点 1 SP ≈ 3.0 人时（待 Planning 现场校准）
+    　|　Lab 2 提交物 4
+  </div>
+</header>
+
+<div class="board">
+
+  <div class="col todo">
+    <h2>To Do <span class="count">7 卡 · 16 SP</span></h2>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-001</span><span class="sp">3 SP</span></div>
+      <div class="title">注册账号</div>
+      <div class="owner"><span><i class="avatar">张</i>张嘉雨 @ember216</span><span>4 Task</span></div>
+      <div class="tasks">① User 聚合与不变式 ② 注册应用服务 + 邮箱唯一 ③ 密码加密 ④ REST 接口 + 错误码</div>
+    </div>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-002</span><span class="sp">2 SP</span></div>
+      <div class="title">登录账号</div>
+      <div class="owner"><span><i class="avatar">张</i>张嘉雨 @ember216</span><span>3 Task</span></div>
+      <div class="tasks">① 认证应用服务 ② 会话/令牌管理 ③ 登录接口</div>
+    </div>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-005</span><span class="sp">3 SP</span></div>
+      <div class="title">发布新问题</div>
+      <div class="owner"><span><i class="avatar">秦</i>秦悦 @QY2026932</span><span>3 Task</span></div>
+      <div class="tasks">① Question 聚合 ② 发布应用服务 ③ 接口 + 参数校验</div>
+    </div>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-007</span><span class="sp">2 SP</span></div>
+      <div class="title">给问题添加标签</div>
+      <div class="owner"><span><i class="avatar">秦</i>秦悦 @QY2026932</span><span>3 Task</span></div>
+      <div class="tasks">① Tag 值对象 ② 问题-标签关联 ③ 标签输入交互</div>
+    </div>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-003</span><span class="sp">2 SP</span></div>
+      <div class="title">浏览问题列表</div>
+      <div class="owner"><span><i class="avatar">王</i>王钰滢 @wtr999-jpg</span><span>3 Task</span></div>
+      <div class="tasks">① 读模型 / 查询服务 ② 分页 ③ 列表页</div>
+    </div>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-004</span><span class="sp">2 SP</span></div>
+      <div class="title">查看问题详情</div>
+      <div class="owner"><span><i class="avatar">王</i>王钰滢 @wtr999-jpg</span><span>3 Task</span></div>
+      <div class="tasks">① 详情读模型 ② 回答列表装配 ③ 详情页</div>
+    </div>
+
+    <div class="card">
+      <div class="top"><span class="sid">US-008</span><span class="sp">2 SP</span></div>
+      <div class="title">提交回答</div>
+      <div class="owner"><span><i class="avatar">李</i>李增艳 @LZY901-art（SM）</span><span>3 Task</span></div>
+      <div class="tasks">① Answer 聚合 ② 提交应用服务 ③ 接口</div>
+    </div>
+
+    <div class="card public">
+      <div class="top"><span class="sid">US-018</span><span class="sp">2 SP</span></div>
+      <div class="title">CI 自动验证（团队公共项）</div>
+      <div class="owner"><span><i class="avatar">公</i>SM 协调认领</span><span>不计个人产能</span></div>
+      <div class="tasks">Lab 7 覆盖率门禁 + Lab 8 镜像构建的载体；PR #12 正在删除，必须有人兜</div>
+    </div>
+  </div>
+
+  <div class="col wip">
+    <h2>In Progress <span class="count">0 卡 · 0 SP</span></h2>
+    <div class="empty">Planning 结束时为空<br>（Sprint 启动后移卡）</div>
+  </div>
+
+  <div class="col done">
+    <h2>Done <span class="count">0 卡 · 0 SP</span></h2>
+    <div class="empty">Planning 结束时为空<br>（Sprint 启动后移卡）</div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="legend">
+    <span><i class="avatar">张</i>张嘉雨 5 SP</span>
+    <span><i class="avatar">秦</i>秦悦 5 SP</span>
+    <span><i class="avatar">王</i>王钰滢 4 SP</span>
+    <span><i class="avatar">李</i>李增艳 2 SP</span>
+    <span><i class="avatar">邹</i>邹园园（PO）验收，不领开发卡</span>
+  </div>
+  <div>责任分配为 Developer 提议稿，待 SM 李增艳在 Planning 现场确认 · 生成：2026-10-27</div>
+</footer>
+
+</body>
+</html>
