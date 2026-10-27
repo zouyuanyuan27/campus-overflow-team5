@@ -2,10 +2,11 @@
 name: CI
 
 on:
-  push:
-    branches: [main, develop, "sprint/**"]
   pull_request:
-    branches: [main, develop]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+
 
 jobs:
   backend:
