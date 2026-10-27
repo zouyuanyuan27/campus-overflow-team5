@@ -22,7 +22,7 @@ jobs:
         run: mvn -B -f backend/pom.xml clean compile
 
       - name: 架构约束检查
-        run: mvn -B -f backend/pom.xml test -pl co-bootstrap -am -Dtest=ArchitectureTest -DfailIfNoTests=false
+        run: mvn -B -f backend/pom.xml test -pl co-bootstrap -am -DfailIfNoTests=false
 
       - name: 单元测试
         run: mvn -B -f backend/pom.xml test -pl co-shared-kernel,co-identity/co-identity-domain,co-identity/co-identity-application,co-identity/co-identity-infrastructure,co-identity/co-identity-interfaces,co-identity/co-identity-api
@@ -38,7 +38,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: backend-test-reports
+          name: backend-test-report
           path: backend/**/target/site/jacoco/
 
   frontend:
@@ -54,8 +54,8 @@ jobs:
     name: 容器镜像构建
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    needs: [backend, frontend]
+    needs: backend
     steps:
       - uses: actions/checkout@v4
-      - name: 构建镜像
+      - name: 占位
         run: echo "build image"
