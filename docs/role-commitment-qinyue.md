@@ -1,5 +1,5 @@
 角色承诺书
-GitHub: @zouyuanyuan27
+GitHub: @QY2026932
 Role: Developer
 
 本人承诺：
