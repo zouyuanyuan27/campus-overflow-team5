@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>CampusOverflow 上下文映射图 · Lab 3 提交物 2</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 28px;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #fff; color: #1f2937;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { font-size: 12px; color: #6b7280; margin-bottom: 10px; }
+  svg { display: block; }
+  .box-label { font-size: 15px; font-weight: 700; }
+  .box-en { font-size: 11px; opacity: .75; }
+  .item { font-size: 11.5px; }
+  .arw-label { font-size: 10.5px; fill: #374151; font-weight: 600; }
+  .arw-sub { font-size: 10px; fill: #6b7280; }
+  .legend-title { font-size: 12px; font-weight: 700; }
+  .legend-item { font-size: 11px; }
+  @media print { body { zoom: .62; } }
+  @page { size: A4 landscape; margin: 8mm; }
+</style>
+</head>
+<body>
+
+<h1>CampusOverflow · 上下文映射图（Context Map）</h1>
+<div class="sub">Lab 3 提交物 2 ｜ 起草：张嘉雨 @ember216 ｜ 2026-10-28 ｜ v1.0 底稿，待现场确认 ｜ 依据 ADR-001 模块化单体 + 六边形分层</div>
+
+<svg viewBox="0 0 1200 720" width="1200" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151"/>
+    </marker>
+    <marker id="arrow-dash" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+
+  <!-- ============ 限界上下文框 ============ -->
+  <!-- Identity -->
+  <rect x="70" y="40" width="250" height="180" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text class="box-label" x="90" y="68" fill="#1e40af">Identity 身份上下文</text>
+  <text class="box-en" x="90" y="86" fill="#1e40af">支撑子域 · 表前缀 id_</text>
+  <text class="item" x="90" y="112">聚合：User、Course / CourseMember</text>
+  <text class="item" x="90" y="132">命令：RegisterUser、VerifyCampusIdentity</text>
+  <text class="item" x="90" y="152">事件：UserRegistered、(UserVerified)</text>
+  <text class="item" x="90" y="172">对外只暴露 userId，不暴露 User 对象</text>
+  <text class="item" x="90" y="196">角色：上游，被 QA / Discovery 依赖</text>
+
+  <!-- QA（核心域） -->
+  <rect x="440" y="40" width="300" height="230" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="3"/>
+  <text class="box-label" x="460" y="68" fill="#9a3412">Q&amp;A 问答上下文</text>
+  <text class="box-en" x="460" y="86" fill="#9a3412">核心域 Core Domain · 表前缀 qa_</text>
+  <text class="item" x="460" y="112">聚合：Question、Answer、Vote、Comment</text>
+  <text class="item" x="460" y="132">不变式：最多一个采纳答案且不可逆</text>
+  <text class="item" x="460" y="152">删除后不可再回答 / 编辑 / 采纳</text>
+  <text class="item" x="460" y="172">事件：QuestionPosted、AnswerSubmitted</text>
+  <text class="item" x="460" y="192">AnswerAccepted、AnswerEndorsed</text>
+  <text class="item" x="460" y="212">VoteCast、CommentPosted、ContentDeleted</text>
+  <text class="item" x="460" y="240">计数器 score/answerCount/viewCount</text>
+  <text class="item" x="460" y="258">由原子 SQL 维护，不由聚合回写（ADR-008）</text>
+
+  <!-- Reputation -->
+  <rect x="860" y="40" width="250" height="180" rx="8" fill="#f3e8ff" stroke="#9333ea" stroke-width="2"/>
+  <text class="box-label" x="880" y="68" fill="#6b21a8">Reputation 声誉上下文</text>
+  <text class="box-en" x="880" y="86" fill="#6b21a8">支撑子域 · 表前缀 rep_</text>
+  <text class="item" x="880" y="112">聚合：ReputationAccount（含 LedgerEntry）</text>
+  <text class="item" x="880" y="132">BadgeAward / BadgePolicy、Bounty</text>
+  <text class="item" x="880" y="152">不变式：余额 = 账目累加，只冲正不改写</text>
+  <text class="item" x="880" y="172">事件：ReputationChanged、BadgeAwarded</text>
+  <text class="item" x="880" y="196">BountyOpened / Awarded / Closed</text>
+
+  <!-- Discovery -->
+  <rect x="440" y="380" width="300" height="150" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text class="box-label" x="460" y="404" fill="#15803d">Discovery 发现上下文</text>
+  <text class="box-en" x="460" y="422" fill="#15803d">支撑子域 · 只读投影 · 表前缀 dis_</text>
+  <text class="item" x="460" y="448">读模型：SearchDocument、Notification</text>
+  <text class="item" x="460" y="468">MentionParser 解析 @提及生成通知</text>
+  <text class="item" x="460" y="494">最终一致（SLA 建议 5 秒，热点 H6）</text>
+  <text class="item" x="460" y="514">演进路径：第一拆分候选（ADR-001）</text>
+
+  <!-- 外部系统 -->
+  <rect x="70" y="380" width="250" height="150" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+  <text class="box-label" x="90" y="404" fill="#9d174d">外部系统 External</text>
+  <text class="box-en" x="90" y="422" fill="#9d174d">系统边界之外</text>
+  <text class="item" x="90" y="448">校园统一身份认证（OAuth / CAS）</text>
+  <text class="item" x="90" y="468">邮件服务（注册验证、通知外发）</text>
+  <text class="item" x="90" y="494">对象存储（正文图片 / 附件）</text>
+  <text class="item" x="90" y="514">集成方式：防腐层 ACL（出站适配器）</text>
+
+  <!-- 共享内核 -->
+  <rect x="70" y="570" width="1040" height="90" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="2" stroke-dasharray="6 4"/>
+  <text class="box-label" x="90" y="598" fill="#374151">共享内核 Shared Kernel · co-shared-kernel</text>
+  <text class="item" x="90" y="622">Actor（参与者上下文）· 领域异常（BusinessRule / Conflict / Forbidden）· Guard 值对象校验 · 值对象基类</text>
+  <text class="item" x="90" y="642">IntegrationEvent / IntegrationEventPublisher · Outbox 发件箱 · ProcessedEventStore 幂等存储 · EventIds</text>
+
+  <!-- ============ 关系箭头 ============ -->
+  <!-- Identity -> QA -->
+  <line x1="320" y1="118" x2="436" y2="118" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="arw-label" x="324" y="104">Customer-Supplier</text>
+  <text class="arw-sub" x="324" y="142">id-api / UserRegistered</text>
+
+  <!-- QA -> Reputation -->
+  <line x1="740" y1="118" x2="856" y2="118" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="arw-label" x="744" y="104">Customer-Supplier</text>
+  <text class="arw-sub" x="744" y="142">事件 → 声誉变动</text>
+
+  <!-- QA -> Discovery -->
+  <line x1="590" y1="270" x2="590" y2="376" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="arw-label" x="600" y="300">Conformist（只读投影）</text>
+  <text class="arw-sub" x="600" y="318">订阅全部 QA 事件构建索引</text>
+
+  <!-- Reputation -> Discovery (curve) -->
+  <path d="M 985 220 C 985 320, 800 380, 744 424" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-dash)"/>
+  <text class="arw-sub" x="820" y="360">BadgeAwarded / ReputationChanged → 通知</text>
+
+  <!-- Identity -> Discovery (curve) -->
+  <path d="M 150 220 C 150 320, 330 380, 436 440" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-dash)"/>
+  <text class="arw-sub" x="228" y="342">UserRegistered → 初始化声誉账户</text>
+
+  <!-- External -> Identity (ACL) -->
+  <line x1="195" y1="376" x2="195" y2="224" stroke="#db2777" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="arw-label" x="255" y="272">ACL 防腐层</text>
+  <text class="arw-sub" x="255" y="290">校园身份模型不泄漏进 Identity</text>
+
+  <!-- ============ 图例 ============ -->
+  <rect x="860" y="380" width="250" height="150" rx="8" fill="#fff" stroke="#d1d5db" stroke-width="1"/>
+  <text class="legend-title" x="878" y="404" fill="#111827">关系类型图例</text>
+  <line x1="880" y1="424" x2="908" y2="424" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="legend-item" x="916" y="428">Customer-Supplier 上游→下游</text>
+  <line x1="880" y1="450" x2="908" y2="450" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-dash)"/>
+  <text class="legend-item" x="916" y="454">Conformist 下游顺从上游</text>
+  <line x1="880" y1="476" x2="908" y2="476" stroke="#db2777" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="legend-item" x="916" y="480">ACL 防腐层（外部系统）</text>
+  <text class="legend-item" x="878" y="504">发布语言 Published Language：</text>
+  <text class="legend-item" x="878" y="520">各上下文的 *-api 模块与集成事件</text>
+</svg>
+
+</body>
+</html>
